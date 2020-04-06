@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <div class="b-parent-home">
+        <div class="b-home">
+            <div>
+                <h1>
+                    Welcome {% if user.is_authenticated %}, {{ user.first_name }} {% else %} !!! {% endif %}
+                </h1>
+            </div>
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="/logout/">
+                        <button class="login_btn">
+                            Logout
+                        </button>
+                    </a>
+                {% else %}
+                <div class="login_info">
+                    <div class="radio_btns">
+                        <div class="radio">
+                            <input 
+                                type="radio" 
+                                name="type" 
+                                value="agent" 
+                                id="agent_radio"
+                            />
+                            <label>
+                                Login as Agent
+                            </label>
+                        </div>
+                        
+                        <div class="radio">
+                            <input 
+                                type="radio" 
+                                name="type" 
+                                value="office" 
+                                id="office_radio"
+                            />
+                            <label>
+                                Login as Office
+                            </label>
+                        </div>
+                    </div>
+                    
+                    
+                        
+                    <button onclick="submit()" class="login_btn">
+                        Login
+                    </button>
+                </div>
+                {% endif %}
+            </div>    
+        </div>
+    </div>
+</html>
+<script>
+    function submit(){
+        let v = document.getElementsByName('type');
+        if(v[0].checked){
+            location.href = '/agentlogin/'
+        }
+        else if(v[1].checked){
+            location.href = '/officelogin/'
+        }
+        else{
+            alert('Choose a user type first.')
+        }
+
+    }
+</script>
+<style>
+.radio{
+    margin-top: 16px;
+}
+.login_info{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.b-parent-home{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: #35495e;
+}
+.b-home{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.login_btn{
+
+    font-weight: 500;
+    font-size: 14px;
+    color: #35495e;
+    margin: 0;
+    margin-top: 16px;
+    margin-left: 48px;
+    padding: 0;
+    min-width: 70px;
+    padding-left: 25px;
+    padding-right: 25px;
+    box-sizing: border-box;
+    border: 1px solid #35495e;
+    border-radius: 20px;
+    box-shadow: 2px 4px 7px 0 #0000001a;
+    background-color: #fff;
+    line-height: 3em;
+    height: 3em;
+}
+button{
+    -webkit-appearance: button;
+    cursor: pointer;
+    outline: none;
+}
+#agent_radio[type="checkbox"]:before{
+    border: 1px solid #35495e;
+    border-radius: 20px;
+}
+</style>

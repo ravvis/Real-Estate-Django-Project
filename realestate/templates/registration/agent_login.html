@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Login for Agent
+        </title>
+    </head>
+    <body>
+        <form method="POST">
+            {% csrf_token %}
+            <div 
+                class="parent" 
+                style="display: flex; 
+                flex-direction:row; 
+                align-items:center; 
+                justify-content:center;
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;"
+            >
+                <div 
+                class="login_page" 
+                style="color:black; 
+                    border-style:solid; 
+                    border-width:2px; 
+                    border-color:black; 
+                    padding:50px;"
+                >
+                    <h1>
+                        Login for Agent
+                    </h1>
+                    <p>
+                        <label>Username</label>
+                        <input type="text" name="username">
+                    </p>
+                    <p>
+                        <label>Password</label>
+                        <input type="password" name="password">
+                    </p>
+                    <button type="submit">Login</button>
+                </div>
+            </div>
+            
+            
+        </form>
+    </body>
+</html>
