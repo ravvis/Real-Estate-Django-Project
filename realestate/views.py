@@ -1,7 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from realestate.models import User
+from .models import *
+from .forms import *
+from .decorators import *
+
+def error_view(request):
+    return render(request, '404.html')
 
 def agentlogin(request):
     if(request.method == 'POST'):
@@ -19,6 +24,20 @@ def agentlogin(request):
 
     return render(request, 'registration/agent_login.html')
 
+@agent_required
+def agent_dashboard(request):    
+    return render(request, 'agent_page.html')
+
+def failure(request):
+    return render(request, 'failure.html')
+
+def home(request):
+    return render(request, 'home.html')
+
+def logout_from(request):
+    logout(request)
+    return redirect('/')
+
 def officelogin(request):
     if(request.method == 'POST'):
         username = request.POST.get('username')
@@ -35,9 +54,28 @@ def officelogin(request):
 
     return render(request, 'registration/officelogin.html')
 
-def home(request):
-    return render(request, 'home.html')
+def prop_view(request):
+    context = {}
+    if request.method == 'POST':
 
-def logout_from(request):
-    logout(request)
-    return redirect('/')
+        form = PropertyForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            print('is valid')
+            form.save(commit=True)
+            return redirect('/property/')
+            print('success')
+        else:
+            print('failure')
+        print('fdsfs')
+    
+    else :
+        form = PropertyForm()
+
+    return render(request, "property.html", {'form':form})
+
+def success(request):
+    return render(request, 'success.html')
+
+
+

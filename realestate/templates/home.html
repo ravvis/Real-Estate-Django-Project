@@ -9,8 +9,13 @@
             </div>
             <div>
                 {% if user.is_authenticated %}
+                    {% if user.is_agent %}
+                        <button onclick="update_property()" class="btn">
+                            Update Property
+                        </button>
+                    {% endif %}
                     <a href="/logout/">
-                        <button class="login_btn">
+                        <button class="btn">
                             Logout
                         </button>
                     </a>
@@ -44,7 +49,7 @@
                     
                     
                         
-                    <button onclick="submit()" class="login_btn">
+                    <button onclick="submit()" class="btn">
                         Login
                     </button>
                 </div>
@@ -66,6 +71,9 @@
             alert('Choose a user type first.')
         }
 
+    }
+    function update_property(){
+        location.href = '/agent-dashboard/'
     }
 </script>
 <style>
@@ -96,14 +104,13 @@
     align-items: center;
     justify-content: center;
 }
-.login_btn{
+.btn{
 
     font-weight: 500;
     font-size: 14px;
     color: #35495e;
     margin: 0;
     margin-top: 16px;
-    margin-left: 48px;
     padding: 0;
     min-width: 70px;
     padding-left: 25px;

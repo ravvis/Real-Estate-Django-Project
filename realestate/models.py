@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class User(AbstractUser):
     is_agent = models.BooleanField(default=False)
@@ -33,6 +35,12 @@ class Agent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     agent = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
 
+    def save(self, *args, **kwargs):
+        self.user.first_name = self.agent.first_name
+        self.user.last_name = self.agent.last_name
+        self.user.email = self.agent.email
+        return models.Model.save(self, *args, **kwargs)
+
 class Address(models.Model):
     address_id = models.AutoField(primary_key=True)
     area = models.CharField(max_length=30, null=False)
@@ -56,22 +64,32 @@ class Property(models.Model):
         ('east', 'east')
     ]
     property_id = models.AutoField(primary_key=True)
+    property_name = models.CharField(max_length=20, null=True, blank=True)
+    property_image = models.ImageField('property_image', upload_to='images/', null=True, blank=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE, null=True)
     tag = models.CharField(max_length=4, choices=PROPERTY_TYPE, default='sale')
-    price = models.DecimalField(max_digits=8, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     no_of_bedrooms = models.IntegerField(default=1)
     no_of_bathrooms = models.IntegerField(default=1)
-    facing = models.CharField(max_length=6, choices=DIRECTIONS, null=True)
+    facing = models.CharField(max_length=6, choices=DIRECTIONS, null=True, blank=True)
     floor = models.IntegerField(default=0)
     is_available = models.BooleanField(default=True)
-    date_of_entry = models.DateField()
-    description = models.TextField(max_length=100)
+    date_of_entry = models.DateTimeField(auto_now_add=True, blank=True)
+    description = models.TextField(max_length=100, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.property_name:            
+            self.property_name = '{}-{} Nivas'.format(self.owner.owner_id, self.owner.owner.first_name)
+            
+        return models.Model.save(self, *args, **kwargs)
+
 
 
 class Purchase(models.Model):
     purchase_id = models.AutoField(primary_key=True)
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    # agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
     date_of_purchase = models.DateField()
+
