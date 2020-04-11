@@ -1,11 +1,174 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            Agent Dashboard
-        </title>
-    </head>
-    <body>
+{% extends "base.html" %}
+{% load my_tags %}
+{% block title %}
+Agent Dashboard
+{% endblock %}
+{% block body %}
+<div class="b-agent-parent">
+    <div class="b-agent">
+        <!-- <div class="b-side-bar">
+            tyujg sdvhhgdfv vhdshg
+        </div> -->
+        <div>
+            <h1>Hello,  {{ agent.agent.first_name }}!!</h1>
+           
+        </div>
+        <div class="filter">
+            Filter : <input type="text" name="filter" id="">
+        </div>
+        <div>
+            <a href="{% url 'home' %}">Home</a>
+        </div>
+        <br>
+        <br>
+        <div class="b-main-content">
+            {% for property in properties %}
+                    
+                <div class="b-property">
+                    <div class="b-property__image">
+                        <img 
+                            src="{{ property.property_image.url }}"  
+                            alt="property image" 
+                            width="200px" 
+                            height="200px"
+                        >
+                    </div>
+                    <div class="b-property__details">
+                        <div class="b-property__details__name">
+                            {{ property.property_name }}
+                        </div>
+                        <div class="b-property__details__area">
+                            {{ property.address.area}}
+                        </div>
+                        <div class="b-property__details__size">
+                            {{ property.no_of_bedrooms}} BHK Flat
+                        </div>
+                        <div class="b-property__details__price">
+                            {% if property.price|divide:1000 < 100 %}
+                                ₹ {{ property.price|divide:1000 }} k
+                            {% else %}
+                            ₹ {{ property.price|divide:100000 }} Lakh
+                            {% endif %} 
+                        </div>
+                        <div class="b-property__details__address">
+                            {{ property.address.description }}
+                        </div>
+                        <div class="b-property__details_deactivate">
+                            <button class="deact_btn">
+                                deactivate
+                            </button>
+                        </div>
+                    </div>
+                    <div class="b-property__action">
+                        <a href="{% url 'purchase_client' property_id=property.property_id %}">
+                            <button class="btn_update">
+                                {% if property.tag|isequal:'rent' %}
+                                    Rented
+                                {% else %}
+                                    Sold 
+                                {% endif %}
+                            </button>
+                        </a>    
+                    </div>
+                </div>    
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    
+</script>
+<style>
+    .b-agent-parent{
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .b-agent{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+    .b-side-bar{
+        width: 100px;
+        top: 0;
+        bottom: 0;
+        position: fixed;
+        background-color: #35495e;
+       
+    }
+    .b-main-content{
+        margin-left: 34px;
+    }
+    .deact_btn{
+        background-color: #fff;
+        color: #35495e;
+        border: 1px solid #35495e;
+        padding: 4px;
+        border-radius: 20px;
+    }
+    .b-property{
+        -webkit-box-shadow:0 1px 6px 0 rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin: 8px;
+    }
+    .b-property__details{
+        margin-left: 16px;
+    }
+    .b-property__details__name{
+        font-size: 28px;
+    }
+    .b-property__details__area{
+        color: #999;
+        font-size: 16px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    .b-property__details__price{
+        margin: 8px 0 8px 0;
+        font-weight: bold;
+    }
+    .b-property__details__address{
+        font-size: 14px;
+        color: #999;
+        max-width: 268px;
+    }
+    .btn_update{
+        font-weight: 500;
+        font-size: 14px;
+        color: #35495e;
+        margin: 0;
+        margin-top: 8px;
+        padding: 0;
+        min-width: 70px;
+        padding-left: 24px;
+        padding-right: 24px;
+        box-sizing: border-box;
+        border: 1px solid #35495e;
+        border-radius: 20px;
+        box-shadow: 2px 4px 7px 0 #0000001a;
+        background-color: #fff;
+        height: 40px;
+
         
-    </body>
-</html>
+    }
+    .btn_update:hover{
+        background-color: rgb(238, 238, 238);
+    }
+    button{
+        -webkit-appearance: button;
+        cursor: pointer;
+        outline: none;
+    }
+    .b-property__action{
+        margin-left: 24px;
+    }
+</style>
+{% endblock %}

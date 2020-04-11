@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '!vrzea8b__1&(^lyb@&g8y82yzus73qqwl)#vf++juxd-blt3n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -68,6 +68,9 @@ TEMPLATES = [
         },
     },
 ]
+# TEMPLATE_DIRS = (
+#     os.path.join(PROJECT_DIR, )
+# )
 
 WSGI_APPLICATION = 'real_estate.wsgi.application'
 
@@ -124,5 +127,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, "static", "static_root")
 AUTH_USER_MODEL = 'realestate.User'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")

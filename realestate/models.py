@@ -65,7 +65,7 @@ class Property(models.Model):
     ]
     property_id = models.AutoField(primary_key=True)
     property_name = models.CharField(max_length=20, null=True, blank=True)
-    property_image = models.ImageField('property_image', upload_to='images/', null=True, blank=True)
+    property_image = models.ImageField('property_image', upload_to='static/images/', default='static/images/default.png', null=True, blank=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE, null=True)
     tag = models.CharField(max_length=4, choices=PROPERTY_TYPE, default='sale')
@@ -80,10 +80,16 @@ class Property(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.property_name:            
-            self.property_name = '{}-{} Nivas'.format(self.owner.owner_id, self.owner.owner.first_name)
+            self.property_name = '{}-{} Nivas'.format(self.owner.owner.person_id, self.owner.owner.first_name)
             
         return models.Model.save(self, *args, **kwargs)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['property_name'])
+        ]
+    def __str__(self):
+        return '{}'.format(self.property_name)
 
 
 class Purchase(models.Model):
@@ -91,5 +97,11 @@ class Purchase(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
-    date_of_purchase = models.DateField()
+    date_of_purchase = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        p = Property.objects.get(pk=self.property.property_id)
+        p.is_available = False
+        p.save()
+        return models.Model.save(self, *args, **kwargs)
 

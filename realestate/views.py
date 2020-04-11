@@ -23,10 +23,19 @@ def agentlogin(request):
             return redirect('/')
 
     return render(request, 'registration/agent_login.html')
-
+         
 @agent_required
-def agent_dashboard(request):    
-    return render(request, 'agent_page.html')
+def agent_dashboard(request): 
+
+    agent = {}   
+    if request.user.is_authenticated:
+        u = request.user
+        agent = Agent.objects.get(user=u);
+        print(agent.agent.email)
+    properties = {}
+    properties = Property.objects.filter(is_available=True)
+
+    return render(request, 'agent_page.html', {'properties' : properties, 'agent' : agent})
 
 def failure(request):
     return render(request, 'failure.html')
@@ -74,6 +83,46 @@ def prop_view(request):
 
     return render(request, "property.html", {'form':form})
 
+
+
+def client_view(request, property_id):
+
+    property = Property.objects.filter(pk=property_id)
+    
+    if property.exists() and property[0].is_available == True:    
+        p = property[0]
+        context = {}
+    
+        if request.method == 'POST':    
+            form = PersonForm(request.POST)
+            print(form.errors)
+    
+            if form.is_valid():    
+                print('form is valid')
+                form.save(commit=True)
+                f = form.instance
+                client = Client(client=f)
+                client.save()
+                property = Property.objects.get(pk=property_id)
+                u = request.user
+                agent = Agent.objects.get(user=u);
+                purchase = Purchase(client = client, property=property, agent=agent)
+                purchase.save()
+                message = 'The property has been success fully updated!!'
+                return redirect('/agent-dashboard/')
+    
+            else:
+                return render(request, "client_info.html", {'form' : form})
+
+        else:
+            form = PersonForm()
+
+        return render(request, "client_info.html", {'form':form})
+    else:
+        return render(request, 'already_purchased.html')
+
+
+        
 def success(request):
     return render(request, 'success.html')
 

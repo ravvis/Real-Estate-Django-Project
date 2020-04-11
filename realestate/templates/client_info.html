@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block title %}
+Agent Dashboard
+{% endblock %}
+{% block body %}
+        <div class="b-client_parent">
+            <div class="b-client">
+                
+                <h2>Enter Client's Information</h2>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                
+                    <input type="submit" value="Submit" />
+                    {{ form.errors }}
+                    {{ form.non_field_errors }}
+                </form>
+            </div>
+        </div>
+
+<style>
+.b-client_parent{
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.b-client{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    border-style:solid; 
+    border-width:2px; 
+    border-color:black; 
+    padding: 16px;
+}
+</style>
+{% endblock %}

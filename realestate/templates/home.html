@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Home
+{% endblock %}
+{% block body %}
     <div class="b-parent-home">
         <div class="b-home">
             <div>
                 <h1>
-                    Welcome {% if user.is_authenticated %}, {{ user.first_name }} {% else %} !!! {% endif %}
+                    
+                    <img src="{% static 'images/default.png' %}"  alt="">
+                    Welcome {% if user.is_authenticated %}, {{ user.first_name }} !!! {% endif %}
                 </h1>
             </div>
             <div>
@@ -57,7 +63,7 @@
             </div>    
         </div>
     </div>
-</html>
+
 <script>
     function submit(){
         let v = document.getElementsByName('type');
@@ -133,3 +139,4 @@ button{
     border-radius: 20px;
 }
 </style>
+{% endblock %}

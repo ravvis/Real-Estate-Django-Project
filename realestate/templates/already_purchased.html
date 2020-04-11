@@ -1,0 +1,66 @@
+{% extends 'base.html'%}
+{% block title %}
+    Proeprty Not Found!!
+{% endblock %}
+{% block body %}
+    <div class="parent_property_not_found">
+        <div class="property_not_found">
+            <h1 style="color: Red">
+                Property Not Found!!
+            </h1>
+            <a href="{% url 'agent_dashboard' %}">
+                <button class="btn">
+                    Dashboard
+                </button>
+            </a>
+        </div>
+    </div>
+    
+
+<style>
+    .parent_property_not_found{
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: fixed;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .property_not_found{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    button{
+
+        font-weight: 500;
+        font-size: 14px;
+        color: #35495e;
+        margin: 0;
+        margin-top: 16px;
+        padding: 0;
+        min-width: 70px;
+        padding-left: 25px;
+        padding-right: 25px;
+        box-sizing: border-box;
+        border: 1px solid #35495e;
+        border-radius: 20px;
+        box-shadow: 2px 4px 7px 0 #0000001a;
+        background-color: #fff;
+        line-height: 3em;
+        height: 3em;
+    }
+    button{
+        -webkit-appearance: button;
+        cursor: pointer;
+        outline: none;
+    }
+</style>
+{% endblock %}
+
+
