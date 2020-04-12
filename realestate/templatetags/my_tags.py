@@ -16,3 +16,11 @@ def isequal(num, val):
         return 1
     else:
         return 0
+
+@register.filter
+def in_property(things, category):
+    return things.filter(property_name__icontains = category)
+
+@register.filter
+def extract_date(datetime):
+    return datetime.purchase_date.date()

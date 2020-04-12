@@ -65,18 +65,16 @@ class Property(models.Model):
     ]
     property_id = models.AutoField(primary_key=True)
     property_name = models.CharField(max_length=20, null=True, blank=True)
-    property_image = models.ImageField('property_image', upload_to='static/images/', default='static/images/default.png', null=True, blank=True)
+    property_image = models.ImageField('property_image', upload_to='images/', default='images/default.png', null=True, blank=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE, null=True)
     tag = models.CharField(max_length=4, choices=PROPERTY_TYPE, default='sale')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     no_of_bedrooms = models.IntegerField(default=1)
     no_of_bathrooms = models.IntegerField(default=1)
-    facing = models.CharField(max_length=6, choices=DIRECTIONS, null=True, blank=True)
     floor = models.IntegerField(default=0)
     is_available = models.BooleanField(default=True)
     date_of_entry = models.DateTimeField(auto_now_add=True, blank=True)
-    description = models.TextField(max_length=100, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.property_name:            

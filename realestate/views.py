@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from .models import *
 from .forms import *
 from .decorators import *
+from django.contrib import messages
+
 
 def error_view(request):
     return render(request, '404.html')
@@ -17,7 +19,7 @@ def agentlogin(request):
         if user is not None:
             login(request, user)
             if user.is_authenticated and user.is_agent:
-                return redirect('/')
+                return redirect('/agent-dashboard/')
 
         else:
             return redirect('/')
@@ -34,8 +36,9 @@ def agent_dashboard(request):
         print(agent.agent.email)
     properties = {}
     properties = Property.objects.filter(is_available=True)
-
-    return render(request, 'agent_page.html', {'properties' : properties, 'agent' : agent})
+    
+    purchases = Purchase.objects.filter(agent=agent)
+    return render(request, 'agent_page.html', {'properties' : properties, 'agent' : agent, 'purchases' : purchases})
 
 def failure(request):
     return render(request, 'failure.html')
@@ -84,7 +87,7 @@ def prop_view(request):
     return render(request, "property.html", {'form':form})
 
 
-
+@agent_required
 def client_view(request, property_id):
 
     property = Property.objects.filter(pk=property_id)
@@ -109,6 +112,7 @@ def client_view(request, property_id):
                 purchase = Purchase(client = client, property=property, agent=agent)
                 purchase.save()
                 message = 'The property has been success fully updated!!'
+                messages.success(request, 'The property has been success fully updated!!')
                 return redirect('/agent-dashboard/')
     
             else:

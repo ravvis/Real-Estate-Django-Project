@@ -5,24 +5,47 @@ Agent Dashboard
 {% endblock %}
 {% block body %}
 <div class="b-agent-parent">
+    <div class="b-agent__sidebar">
+            <div>
+                <h1>Hello,  {{ agent.agent.first_name }}!!</h1>    
+            </div>
+            <div class="filter">
+                Filter : <input type="text" name="filter" id="">
+            </div>
+            
+            <div class="b-agent-s__options">
+                <div class="options select">
+                    <div>
+                        Update sale/rent
+                    </div>    
+                </div>
+                <div class="options">
+                    Update property
+                </div>
+                <div class="options">
+                    Sales Report
+                </div>
+            </div>    
+            <div class="nav-buttons">
+                <a href="/logout/">
+                    <button class="btn_update">
+                        Logout
+                    </button>
+                </a>
+            </div>
+    </div>    
     <div class="b-agent">
-        <!-- <div class="b-side-bar">
-            tyujg sdvhhgdfv vhdshg
-        </div> -->
-        <div>
-            <h1>Hello,  {{ agent.agent.first_name }}!!</h1>
-           
+        <div class="b-agent__message">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
-        <div class="filter">
-            Filter : <input type="text" name="filter" id="">
-        </div>
-        <div>
-            <a href="{% url 'home' %}">Home</a>
-        </div>
-        <br>
-        <br>
-        <div class="b-main-content">
-            {% for property in properties %}
+        <div class="b-main-content" id="sale_rent_update">
+            {% for property in properties|in_property:''%}
                     
                 <div class="b-property">
                     <div class="b-property__image">
@@ -41,8 +64,9 @@ Agent Dashboard
                             {{ property.address.area}}
                         </div>
                         <div class="b-property__details__size">
-                            {{ property.no_of_bedrooms}} BHK Flat
+                            {{ property.no_of_bedrooms}} BHK Flat ( Floor : {{ property.floor }} )
                         </div>
+                        
                         <div class="b-property__details__price">
                             {% if property.price|divide:1000 < 100 %}
                                 ₹ {{ property.price|divide:1000 }} k
@@ -53,11 +77,12 @@ Agent Dashboard
                         <div class="b-property__details__address">
                             {{ property.address.description }}
                         </div>
-                        <div class="b-property__details_deactivate">
+                        {{ property.owner.first_name}}
+                        <!-- <div class="b-property__details_deactivate">
                             <button class="deact_btn">
                                 deactivate
                             </button>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="b-property__action">
                         <a href="{% url 'purchase_client' property_id=property.property_id %}">
@@ -73,12 +98,83 @@ Agent Dashboard
                 </div>    
             {% endfor %}
         </div>
+        <div>
+            {% for purchase in purchases %}
+                <div
+                    style="display: flex;
+                    flex-direction:row;
+                    justify-content:space-evenly;
+                    align-items: center;
+                    "
+                >
+                    <div>
+                        {{ purchase.property.property_name }}
+                    </div>
+                    <div>
+                        {{ purchase.client.client.first_name }}
+                    </div>
+                    <div>
+                        {{ purchase.property.price }}
+                    </div>
+                    <div>
+                        {{ purchase.date_of_purchase|date }}
+                    </div>
+                    <div>
+                        {{ purchase.property.tag}}
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 <script>
-    
+    var c = 9;
+    function selector(){
+        
+    }
 </script>
 <style>
+    .nav-buttons{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 48px;
+    }
+    .success{
+        color: green;
+        position: fixed;
+        top: 0;
+        margin-top: 16px;
+    }
+    .b-agent-s__options{
+        margin-top: 48px;
+        border-style: solid;
+        border-color: black;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+    .options{
+        padding: 16px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-content: center;
+        cursor: pointer;
+    }
+    .options:not(:nth-child(3)){
+        border-bottom-style: solid;
+        border-width: 1px;
+    }
+    .b-agent_message{
+        position: fixed;
+        padding: 8px;
+        -webkit-box-shadow:0 1px 6px 0 rgba(0,0,0,0.05);
+    }
     .b-agent-parent{
         top: 0;
         bottom: 0;
@@ -87,21 +183,38 @@ Agent Dashboard
         display: flex;
         flex-direction: row;
         justify-content: center;
-        align-items: center;
+        max-height: 100vh;
+    }
+    .b-agent__sidebar{
+        bottom: 0;
+        top: 0;
+        margin-top: 40px;
+        color: black;
     }
     .b-agent{
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
+        max-height: 100vh;
+        overflow: auto;
+        margin-top: 64px;
     }
-    .b-side-bar{
-        width: 100px;
-        top: 0;
-        bottom: 0;
-        position: fixed;
-        background-color: #35495e;
-       
-    }
+    .b-agent::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+.b-agent::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+.b-agent::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+}
     .b-main-content{
         margin-left: 34px;
     }
@@ -117,7 +230,8 @@ Agent Dashboard
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        margin: 8px;
+        margin: 24px;
+        margin-top: 0;
     }
     .b-property__details{
         margin-left: 16px;
@@ -156,7 +270,6 @@ Agent Dashboard
         box-shadow: 2px 4px 7px 0 #0000001a;
         background-color: #fff;
         height: 40px;
-
         
     }
     .btn_update:hover{
