@@ -1,22 +1,24 @@
 {% extends 'base.html' %}
 {% load my_tags %}
 {% block title %}
-Agent Dashboard
+Agent Register
 {% endblock %}
 {% block body %}
         <div class="b-client_parent">
             <div class="b-client">
                 
-                <h2>Enter Client's Information</h2>
+                <h2>Enter Agents's Information</h2>
                 <form action="" method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <span style="font-size: 11px; color:red;">(write number in +91 form!)</span>
+                    {{ form1.as_p }}
                     <br>
+                    {{ form2.as_p}}
                     <br>
                     <input type="submit" value="Submit" />
-                    {{ form.errors }}
-                    {{ form.non_field_errors }}
+                    {{ form1.errors }}
+                    {{ form1.non_field_errors }}
+                    {{ form2.errors }}
+                    {{ form2.non_field_errors }}                
                 </form>
             </div>
         </div>

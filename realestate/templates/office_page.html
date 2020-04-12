@@ -1,0 +1,482 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block title %}
+    Office Dashboard Page
+{% endblock %}
+{% block body %}
+    <div class="b-office__parent">
+        <div class="b-office">
+            <div class="b-office__sidebar">
+                <div>
+                    <h2>
+                        Office  <br>
+                        Admin   <br>
+                        Portal  <br>
+                    </h2>
+                </div>
+                <div class="b-sidebar__options">
+                    <div class="option" id="option1" onclick="selector(event, 'id_agent_list')">
+                        Sales Report
+                    </div>
+                    <div class="option" id="option2" onclick="selector(event, 'id_property_list')">
+                        Properties
+                    </div>
+                    <div class="option" onclick="agent_register()">  
+                        Register An Agent
+                    </div>
+                </div>
+                <div style="margin-top:40px">
+                    <a href="/logout/">
+                        <button class="btn_update">
+                            Logout
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <div id="welcome_page">
+                
+                    <div
+                        style="font-size:24px;
+                        margin-bottom:48px;
+                        "
+                    >
+                        Welcome to the Portal
+                    </div>
+                    <div>
+                        Please select one of the option on the left side
+                    </div>
+                
+            </div>
+            <div class="b-agent-list hide" id="id_agent_list" >
+                {% for agent in agents %}
+                <div class="b-agent-list__each-agent">
+                    <div class="b-agent-info">
+                        <div>
+                            <div>
+                                Agent ID : {{ agent.agent.person_id }}
+                            </div> 
+                            <div>
+                                Agent's Name : {{ agent.agent }}
+                            </div>
+                            <div>
+                                Phone no : {{ agent.agent.phone_no }}
+                            </div>
+                            <div>
+                                email : {{ agent.agent.email }}
+                            </div>
+                        </div>
+                        <div class="b-show-btn">
+                            <button onclick="show('agent{{agent.agent.person_id}}')" style="padding: 8px;"> 
+                                Sale Report! 
+                            </button>
+                        </div>
+                                        
+                        <div class="b-agent__sales hide" id="agent{{agent.agent.person_id}}">
+                            <div class="b-agent__sales-child">
+                                <div class="b-close-btn">
+                                    <button class="btn_update" onclick="close_me()">
+                                        close
+                                    </button>
+                                </div>
+                                <div>
+                                    <h1>Sales Report of {{ agent.agent }}</h1>
+                                </div>
+                                {% with p=purchases|in_purchase:agent %}
+                                    {% if p|is_empty_query %}
+                                        <div>
+                                            <center>
+                                                No Sales Reported Yet!!
+                                            </center> 
+                                        </div>
+                                    {% else %}
+                                    
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <b>Property ID</b>
+                                            </td>
+                                            <td>
+                                                <b>Property Name</b>
+                                            </td>
+                                            <td>
+                                                <b>Property Area</b>
+                                            </td>
+                                            <td>
+                                                <b>Prchase ID</b>
+                                            </td>
+                                            <td>
+                                                <b>Client Name</b>
+                                            </td>
+                                            <td>
+                                                <b>Price</b>
+                                            </td>
+                                            <td>
+                                                <b>Date of Purchase</b>
+                                            </td>
+                                            <td>
+                                                <b>Property Type</b>
+                                            </td>
+                                            
+                                        </tr>
+                                        {% for purchase in purchases|in_purchase:agent %}
+                                            
+                                                <tr>
+                                                    <td>
+                                                        {{purchase.property.property_id}}
+                                                    </td>
+                                                    <td>
+                                                        {{ purchase.property.property_name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ purchase.property.address.area }}
+                                                    </td>
+                                                    <td>
+                                                        {{ purchase.purchase_id}}
+                                                    </td>
+                                                    <td>
+                                                        {{ purchase.client.client }} 
+                                                    </td>
+                                                    <td>
+                                                        {{ purchase.property.price }}
+                                                    </td>
+                                                    <td>
+                                                        {{ purchase.date_of_purchase|date }}
+                                                    </td>
+                                                    <td>
+                                                        {{ purchase.property.tag}}
+                                                    </td>
+                                                </tr>
+                                            
+                                        {% endfor %}
+                                        </tbody>
+                                        </table>
+                                    {% endif %}
+                                {% endwith %}
+                            </div>    
+                        </div> 
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="b-properties_list hide" id="id_property_list" >
+                {% with p=properties|is_available:1 %}
+                {% if p|is_empty_query == 0 %}
+                <div>                  
+                    <div>
+                        <h1>
+                            Properties which are available for Sale/Rent
+                        </h1>
+                    </div>
+                    <div>
+                        {% for property in properties|is_available:1 %}
+                            <div>
+                                <div class="b-property">
+                                    <div class="b-property__image">
+                                        <img 
+                                            src="{{ property.property_image.url }}"  
+                                            alt="property image" 
+                                            width="200px" 
+                                            height="200px"
+                                        >
+                                    </div>
+                                    <div class="b-property__details">
+                                        <div class="b-property__details__name">
+                                            {{ property.property_name }}
+                                        </div>
+                                        <div class="b-property__details__area">
+                                            {{ property.address.area}}
+                                        </div>
+                                        <div class="b-property__details__size">
+                                            {{ property.no_of_bedrooms}} BHK Flat ( Floor : {{ property.floor }} )
+                                        </div>
+                                        
+                                        <div class="b-property__details__price">
+                                            {% if property.price|divide:1000 < 100 %}
+                                                ₹ {{ property.price|divide:1000 }} k
+                                            {% else %}
+                                            ₹ {{ property.price|divide:100000 }} Lakh
+                                            {% endif %} 
+                                        </div>
+                                        <div class="b-property__details__address">
+                                            {{ property.address.description }}
+                                        </div>
+                                        <div class="b-property__details_price">
+                                            By : {{ property.owner.owner}} - ( {{ property.owner.owner.phone_no }} )
+                                        </div>
+                                       
+                                    </div>
+                                    
+                                </div>    
+                            </div>    
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </div>
+    </div>
+<script>
+    let v = document.getElementsByName('type');
+    open_id = '';
+    function close_me(){
+        console.log('close called');
+        if(this.open_id != '')
+            document.getElementById(this.open_id).classList.add('hide');
+        this.open_id = '';
+    }
+    function show(str){
+        document.getElementById(str).classList.remove('hide');
+        if(open_id != '' && this.open_id != str){
+            document.getElementById(this.open_id).classList.add('hide');
+        }        
+        this.open_id = str;
+    };
+    opt = 'welcome_page';
+    selected = '';
+    function selector(event, idt){
+        if(this.opt != idt){
+            document.getElementById(idt).classList.remove('hide');
+            if(this.opt != ''){
+                document.getElementById(this.opt).classList.add('hide');
+            }
+            this.opt = idt;
+        }
+        
+        document.getElementById(event.target.id).classList.add('select');
+        if(this.selected != ''){
+            document.getElementById(this.selected).classList.remove('select');
+        }
+        this.selected = event.target.id;
+        
+        
+    }
+    function agent_register(){
+        window.location = '/register/agent/';
+    }
+    
+</script>
+<style>
+    #welcome_page{
+        padding : 56px;
+        border: 1px solid black;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .select{
+        font-weight: bold;
+    }
+    .b-office__sidebar{
+        margin-right: 64px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: fixed;
+        left: 140px;
+        top: 50;
+    }
+    .b-sidebar__options{
+        margin-top: 32px;
+        border: 1px solid black;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+    .option{
+        padding: 15px;
+        font-size: 18px;
+    }
+    .option:hover{
+        font-weight: bold;
+    }
+    .option:not(:last-child){
+        border-bottom: 1px solid black;
+    }
+
+    .hide{
+        display: none !important;
+    }
+    table{
+        padding: 8px;
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    td{
+        padding: 8px;
+    }
+    tr:first-child td{
+        border-bottom: 1px solid black;
+    }
+    tr td{
+        border-right: 1px solid black;
+    }
+    .b-close-btn{
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: right;
+        align-items: flex-end;
+    }
+    
+    .hide{
+        display: none !important;
+    }
+    .b-agent-info{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 48px;
+        border: 1px solid black;
+        margin: 8px;
+    }
+    .b-office__parent{
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    .b-office{
+        display: flex;
+        flex-direction: row;
+        margin-top: 64px;
+        align-items: center;
+        justify-content: center;
+    }
+    .b-agent__sales{
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        position: fixed;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(75, 72, 72, 0.3);
+    }
+    .b-agent__sales-child{
+        background-color: white;
+        padding: 32px;
+        border-radius: 15px;
+        max-height: 500px;
+        overflow: auto;
+    }
+    .btn_update{
+        font-weight: 500;
+        font-size: 14px;
+        color: #35495e;
+        margin: 0;
+        margin-top: 8px;
+        padding: 0;
+        min-width: 70px;
+        padding-left: 24px;
+        padding-right: 24px;
+        box-sizing: border-box;
+        border: 1px solid #35495e;
+        border-radius: 20px;
+        box-shadow: 2px 4px 7px 0 #0000001a;
+        background-color: #fff;
+        height: 40px;
+        
+    }
+    .btn_update:hover{
+        background-color: rgb(238, 238, 238);
+    }
+    button{
+        -webkit-appearance: button;
+        cursor: pointer;
+        outline: none;
+    }
+    .b-property{
+        -webkit-box-shadow:0 1px 6px 0 rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin: 24px;
+        margin-top: 0;
+    }
+    .b-property__details{
+        margin-left: 16px;
+    }
+    .b-property__details__name{
+        font-size: 28px;
+    }
+    .b-property__details__area{
+        color: #999;
+        font-size: 16px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    .b-property__details__price{
+        margin: 8px 0 8px 0;
+        font-weight: bold;
+    }
+    .b-property__details__address{
+        font-size: 14px;
+        color: #999;
+        max-width: 268px;
+    }
+
+</style>
+{% endblock %}

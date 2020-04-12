@@ -12,10 +12,12 @@ urlpatterns = [
     path('officelogin/', views.officelogin, name='officelogin'),
     path('logout/', views.logout_from, name='logout'),
     path('property/', views.prop_view, name='form'),
+    path('register/agent/', views.agent_register, name='agent_register'),
     path('success/', views.success, name='success'),
     path('failure/', views.failure, name='failure'),
     path('agent-dashboard/', views.agent_dashboard, name="agent_dashboard"),
-
+    path('office-dashboard/', views.office_dashboard, name="office_dashboard"),
+    
     re_path(r'^purchase/(?P<property_id>\d+)/$', views.client_view, name="purchase_client"),
     
 ] 

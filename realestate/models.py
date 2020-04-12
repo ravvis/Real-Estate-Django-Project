@@ -31,6 +31,7 @@ class Owner(models.Model):
 class Client(models.Model):
     client = models.ForeignKey(Person, on_delete=models.CASCADE)
 
+
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     agent = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
@@ -39,6 +40,8 @@ class Agent(models.Model):
         self.user.first_name = self.agent.first_name
         self.user.last_name = self.agent.last_name
         self.user.email = self.agent.email
+        self.user.save()
+
         return models.Model.save(self, *args, **kwargs)
 
 class Address(models.Model):

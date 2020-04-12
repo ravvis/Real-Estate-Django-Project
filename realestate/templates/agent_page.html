@@ -14,15 +14,15 @@ Agent Dashboard
             </div>
             
             <div class="b-agent-s__options">
-                <div class="options select">
+                <div class="options select" id="1" onclick="selector(event, 'sale_rent_update')">
                     <div>
                         Update sale/rent
                     </div>    
                 </div>
-                <div class="options">
+                <div class="options" id="2" onclick="">
                     Update property
                 </div>
-                <div class="options">
+                <div class="options" id="3" onclick="selector(event, 'sale_report')">
                     Sales Report
                 </div>
             </div>    
@@ -98,45 +98,95 @@ Agent Dashboard
                 </div>    
             {% endfor %}
         </div>
-        <div>
-            {% for purchase in purchases %}
-                <div
-                    style="display: flex;
-                    flex-direction:row;
-                    justify-content:space-evenly;
-                    align-items: center;
-                    "
-                >
-                    <div>
-                        {{ purchase.property.property_name }}
-                    </div>
-                    <div>
-                        {{ purchase.client.client.first_name }}
-                    </div>
-                    <div>
-                        {{ purchase.property.price }}
-                    </div>
-                    <div>
-                        {{ purchase.date_of_purchase|date }}
-                    </div>
-                    <div>
-                        {{ purchase.property.tag}}
-                    </div>
-                    <div>
-
-                    </div>
+        <div id="sale_report" class="not_show">
+            {% if purchases|is_empty_query %}
+                <div></div>
+                    YOU HAVEN'T SOLD/RENTED ANY PROPERTY YET!!     
                 </div>
+            {% else %}
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <b>Property Name</b>
+                    </td>
+                    <td>
+                        <b>Client Name</b>
+                    </td>
+                    <td>
+                        <b>Price</b>
+                    </td>
+                    <td>
+                        <b>Date of Purchase</b>
+                    </td>
+                    <td>
+                        <b>Property Type</b>
+                    </td>
+                    
+                </tr>
+            {% for purchase in purchases %}
+                <tr>
+                    <td>
+                        {{ purchase.property.property_name }}
+                    </td>
+                    <td>
+                        {{ purchase.client.client }} 
+                    </td>
+                    <td>
+                        {{ purchase.property.price }}
+                    </td>
+                    <td>
+                        {{ purchase.date_of_purchase|date }}
+                    </td>
+                    <td>
+                        {{ purchase.property.tag}}
+                    </td>
+                </tr>
             {% endfor %}
+            </tbody>
+            </table>
+            {% endif %}
         </div>
     </div>
 </div>
 <script>
-    var c = 9;
-    function selector(){
-        
+    var id_name = "sale_rent_update";
+    var selected_option = "1";
+    function selector(event, str){
+        if(id_name != str){
+
+            document.getElementById(this.id_name).classList.add("not_show");
+            document.getElementById(str).classList.remove("not_show");
+            this.id_name = str;
+            
+            document.getElementById(event.target.id).classList.add("select");
+            document.getElementById(this.selected_option).classList.remove("select");
+            this.selected_option = event.target.id;
+        }
     }
 </script>
 <style>
+    table{
+        border-style: solid;
+        border-width: 1px;
+        border-collapse:collapse;
+    }
+    table tbody tr:first-child td{
+        border-bottom-style: solid;
+        border-width: 1px;
+    }
+    table tbody tr:not(:nth-child(2n)) td{
+        background-color: rgb(245, 245, 245);;
+    }
+    td{
+        padding: 8px;
+    }
+    .bold{
+        font-weight: bold;
+    }
+    #sale_report{
+        margin-left: 42px;
+    }
     .nav-buttons{
         display: flex;
         flex-direction: column;
@@ -145,6 +195,7 @@ Agent Dashboard
         margin-top: 48px;
     }
     .success{
+        
         color: green;
         position: fixed;
         top: 0;
@@ -166,9 +217,18 @@ Agent Dashboard
         align-content: center;
         cursor: pointer;
     }
+    .select{
+        font-weight: bold;
+    }
+    .not_show{
+        display: none;
+    }
     .options:not(:nth-child(3)){
         border-bottom-style: solid;
         border-width: 1px;
+    }
+    .options:hover{
+        font-weight: bold;
     }
     .b-agent_message{
         position: fixed;
@@ -190,6 +250,8 @@ Agent Dashboard
         top: 0;
         margin-top: 40px;
         color: black;
+        margin-right: 64px;
+        margin-left: 24px;
     }
     .b-agent{
         display: flex;

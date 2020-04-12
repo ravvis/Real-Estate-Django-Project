@@ -59,12 +59,20 @@ def officelogin(request):
         if user is not None:
             login(request, user)
             if user.is_authenticated and user.is_office:
-                return redirect('/')
+                return redirect('/office-dashboard/')
 
         else:
             return redirect('/home/')
 
     return render(request, 'registration/officelogin.html')
+
+@office_required
+def office_dashboard(request):
+    agents = Agent.objects.all()
+    purchases = Purchase.objects.all()
+    properties = Property.objects.all()
+
+    return render(request, 'office_page.html', {'agents' : agents, 'purchases' : purchases, 'properties' : properties})
 
 def prop_view(request):
     context = {}
@@ -85,6 +93,31 @@ def prop_view(request):
         form = PropertyForm()
 
     return render(request, "property.html", {'form':form})
+
+@office_required
+def agent_register(request):
+    context = {}
+    if request.method == 'POST':
+        form1 = PersonForm(request.POST)
+        form2 = UserForm(request.POST)
+
+        if form1.is_valid() and form2.is_valid():
+            form1.save(commit=True)
+            f1 = form1.instance
+            f = form2.instance
+            f.is_agent = True
+            f.save()
+
+            f2 = User.objects.get(username=f.username)
+            agent = Agent(agent=f1, user=f2)
+            agent.save()
+            return redirect('/office-dashboard/')
+        else:
+            return redirect('/failure/')
+    else:
+        form1 = PersonForm()
+        form2 = UserForm()
+    return render(request, 'agent-register.html', {'form1' : form1, 'form2' : form2}) 
 
 
 @agent_required
@@ -111,8 +144,8 @@ def client_view(request, property_id):
                 agent = Agent.objects.get(user=u);
                 purchase = Purchase(client = client, property=property, agent=agent)
                 purchase.save()
-                message = 'The property has been success fully updated!!'
-                messages.success(request, 'The property has been success fully updated!!')
+                message = 'The property - ' + property.property_name + ' has been success fully updated!!'
+                messages.success(request, message)
                 return redirect('/agent-dashboard/')
     
             else:
