@@ -4,7 +4,7 @@
     Office Dashboard Page
 {% endblock %}
 {% block body %}
-    <div class="b-office__parent">
+    <div class="b-office__parent" id="main">
         <div class="b-office">
             <div class="b-office__sidebar">
                 <div>
@@ -20,6 +20,9 @@
                     </div>
                     <div class="option" id="option2" onclick="selector(event, 'id_property_list')">
                         Properties
+                    </div>
+                    <div class="option" onclick="property_register()">
+                        Register A Property
                     </div>
                     <div class="option" onclick="agent_register()">  
                         Register An Agent
@@ -37,13 +40,9 @@
                 
                     <div
                         style="font-size:24px;
-                        margin-bottom:48px;
                         "
                     >
                         Welcome to the Portal
-                    </div>
-                    <div>
-                        Please select one of the option on the left side
                     </div>
                 
             </div>
@@ -73,10 +72,8 @@
                                         
                         <div class="b-agent__sales hide" id="agent{{agent.agent.person_id}}">
                             <div class="b-agent__sales-child">
-                                <div class="b-close-btn">
-                                    <button class="btn_update" onclick="close_me()">
-                                        close
-                                    </button>
+                                <div class="b-close-btn" onclick="close_me()" style="font-size: 28px; cursor:pointer;">
+                                    &#10006;
                                 </div>
                                 <div>
                                     <h1>Sales Report of {{ agent.agent }}</h1>
@@ -280,6 +277,7 @@
         if(this.open_id != '')
             document.getElementById(this.open_id).classList.add('hide');
         this.open_id = '';
+        document.body.style.overflow = 'auto';
     }
     function show(str){
         document.getElementById(str).classList.remove('hide');
@@ -287,6 +285,7 @@
             document.getElementById(this.open_id).classList.add('hide');
         }        
         this.open_id = str;
+        document.body.style.overflow = 'hidden';
     };
     opt = 'welcome_page';
     selected = '';
@@ -310,9 +309,12 @@
     function agent_register(){
         window.location = '/register/agent/';
     }
-    
+    function property_register(){
+        window.location = '/property/'
+    }
 </script>
 <style>
+    
     #welcome_page{
         padding : 56px;
         border: 1px solid black;
@@ -321,6 +323,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
     }
     .select{
         font-weight: bold;

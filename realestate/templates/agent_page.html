@@ -19,10 +19,7 @@ Agent Dashboard
                         Update sale/rent
                     </div>    
                 </div>
-                <div class="options" id="2" onclick="">
-                    Update property
-                </div>
-                <div class="options" id="3" onclick="selector(event, 'sale_report')">
+                <div class="options" id="2" onclick="selector(event, 'sale_report')">
                     Sales Report
                 </div>
             </div>    
@@ -66,7 +63,9 @@ Agent Dashboard
                         <div class="b-property__details__size">
                             {{ property.no_of_bedrooms}} BHK Flat ( Floor : {{ property.floor }} )
                         </div>
-                        
+                        <div class="" style="margin-top: 4px;">
+                            For {{ property.tag }}
+                        </div>
                         <div class="b-property__details__price">
                             {% if property.price|divide:1000 < 100 %}
                                 ₹ {{ property.price|divide:1000 }} k
@@ -78,11 +77,6 @@ Agent Dashboard
                             {{ property.address.description }}
                         </div>
                         {{ property.owner.first_name}}
-                        <!-- <div class="b-property__details_deactivate">
-                            <button class="deact_btn">
-                                deactivate
-                            </button>
-                        </div> -->
                     </div>
                     <div class="b-property__action">
                         <a href="{% url 'purchase_client' property_id=property.property_id %}">
@@ -93,7 +87,86 @@ Agent Dashboard
                                     Sold 
                                 {% endif %}
                             </button>
-                        </a>    
+                        </a> 
+                        <br>
+                        <br>
+                        <button onclick="show_property_details('b-prop-details-{{property.property_id}}')" class="btn_update">
+                            Details
+                        </button>   
+                    </div>
+                    <div class="b-property-details__parent not_show" id="b-prop-details-{{property.property_id}}">
+                        <div class="b-property-details">
+                            <div
+                                style="display: flex;
+                                flex-direction: row-reverse;
+                                justify-content:start;
+                                align-items:flex-end;
+                                font-size:28px;
+                                
+                                "
+                            >
+                                <div style="cursor:pointer;" onclick="close_details('b-prop-details-{{property.property_id}}')">
+                                    &#10006;
+                                </div>
+                            </div>
+                            <div style="padding: 48px;">
+                            
+                            <div class="b-property">
+                                <div class="b-property__image">
+                                    <img 
+                                        src="{{ property.property_image.url }}"  
+                                        alt="property image" 
+                                        width="200px" 
+                                        height="200px"
+                                    >
+                                </div>
+                                <div class="b-property__details">
+                                    <div class="b-property__details__name">
+                                        {{ property.property_name }}
+                                    </div>
+                                    <div class="b-property__details__area">
+                                        {{ property.address.area}}
+                                    </div>
+                                    <div class="b-property__details__size">
+                                        {{ property.no_of_bedrooms}} BHK Flat ( Floor : {{ property.floor }} )
+                                    </div>
+                                    
+                                    <div class="b-property__details__price">
+                                        {% if property.price|divide:1000 < 100 %}
+                                            ₹ {{ property.price|divide:1000 }} k
+                                        {% else %}
+                                        ₹ {{ property.price|divide:100000 }} Lakh
+                                        {% endif %} 
+                                    </div>
+                                    <div class="b-property__details__address">
+                                        {{ property.address.description }}
+                                    </div>
+                                    {{ property.owner.first_name}}
+                                </div>
+                            </div>
+                            <center>
+                                <div>
+                                    <div>
+                                        Property ID: {{ property.property_id }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <h2>
+                                            Owner Details :
+                                        </h2> 
+                                    </div>
+                                    <div>
+                                        Name : {{property.owner.owner}}
+                                        <br>
+                                        Phone No : {{property.owner.owner.phone_no}}
+                                        <br>
+                                        email : {{ property.owner.owner.email}}
+                                    </div>
+                                </div>
+                            </center>
+                            </div>
+                        </div>
                     </div>
                 </div>    
             {% endfor %}
@@ -130,7 +203,7 @@ Agent Dashboard
                         {{ purchase.property.property_name }}
                     </td>
                     <td>
-                        {{ purchase.client.client }} 
+                        {{ purchase.client.client }}  
                     </td>
                     <td>
                         {{ purchase.property.price }}
@@ -160,12 +233,38 @@ Agent Dashboard
             this.id_name = str;
             
             document.getElementById(event.target.id).classList.add("select");
-            document.getElementById(this.selected_option).classList.remove("select");
+            if(this.selected_option != event.target.id)
+                document.getElementById(this.selected_option).classList.remove("select");
             this.selected_option = event.target.id;
         }
+    };
+    function show_property_details(str){
+        document.getElementById(str).classList.remove('not_show');
+    };
+    function close_details(str){
+        document.getElementById(str).classList.add('not_show');
     }
 </script>
 <style>
+    .b-property-details__parent{
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        position: fixed;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(73, 72, 72, 0.8);
+    }
+    .b-property-details{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: white;
+        padding: 13px;
+    }
     table{
         border-style: solid;
         border-width: 1px;
@@ -206,6 +305,7 @@ Agent Dashboard
         border-style: solid;
         border-color: black;
         border-radius: 15px;
+        border-width: 1px;
         display: flex;
         flex-direction: column;
     }
@@ -223,7 +323,7 @@ Agent Dashboard
     .not_show{
         display: none;
     }
-    .options:not(:nth-child(3)){
+    .options:not(:last-child){
         border-bottom-style: solid;
         border-width: 1px;
     }

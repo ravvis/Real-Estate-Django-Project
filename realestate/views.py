@@ -22,7 +22,9 @@ def agentlogin(request):
                 return redirect('/agent-dashboard/')
 
         else:
-            return redirect('/')
+            message = 'Invalid username or password'
+            messages.error(request, message)
+            return redirect('/agentlogin/')
 
     return render(request, 'registration/agent_login.html')
          
@@ -62,7 +64,9 @@ def officelogin(request):
                 return redirect('/office-dashboard/')
 
         else:
-            return redirect('/home/')
+            message = 'Invalid username or password'
+            messages.error(request, message)
+            return redirect('/officelogin/')
 
     return render(request, 'registration/officelogin.html')
 
@@ -74,6 +78,7 @@ def office_dashboard(request):
 
     return render(request, 'office_page.html', {'agents' : agents, 'purchases' : purchases, 'properties' : properties})
 
+@office_required
 def prop_view(request):
     context = {}
     if request.method == 'POST':

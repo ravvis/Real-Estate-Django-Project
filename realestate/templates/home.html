@@ -9,7 +9,7 @@
             <div>
                 <h1>
                     
-                    <img src="{% static 'images/default.png' %}"  alt="">
+                    <!-- <img src="{% static 'images/default.png' %}"  alt=""> -->
                     Welcome {% if user.is_authenticated %}, {{ user.first_name }} !!! {% endif %}
                 </h1>
             </div>
@@ -102,19 +102,22 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    color: #35495e;
+    
 }
 .b-home{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 48px;
+    border: 1px solid black;
+    border-radius: 15px;
 }
 .btn{
 
     font-weight: 500;
     font-size: 14px;
-    color: #35495e;
+    color: black;
     margin: 0;
     margin-top: 16px;
     padding: 0;
@@ -122,12 +125,13 @@
     padding-left: 25px;
     padding-right: 25px;
     box-sizing: border-box;
-    border: 1px solid #35495e;
+    border: 1px solid black;
     border-radius: 20px;
     box-shadow: 2px 4px 7px 0 #0000001a;
     background-color: #fff;
     line-height: 3em;
     height: 3em;
+    margin-left: 24px;
 }
 button{
     -webkit-appearance: button;
@@ -135,7 +139,7 @@ button{
     outline: none;
 }
 #agent_radio[type="checkbox"]:before{
-    border: 1px solid #35495e;
+    border: 1px solid black;
     border-radius: 20px;
 }
 </style>
