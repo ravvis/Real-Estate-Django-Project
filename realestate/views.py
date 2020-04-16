@@ -19,6 +19,12 @@ def agentlogin(request):
         if user is not None:
             login(request, user)
             if user.is_authenticated and user.is_agent:
+                x = 24
+                while x < 39:
+                    person = Person.objects.get(pk=x)
+                    owner = Owner(owner=person)
+                    owner.save()
+                    x = x + 1
                 return redirect('/agent-dashboard/')
 
         else:
@@ -75,8 +81,8 @@ def office_dashboard(request):
     agents = Agent.objects.all()
     purchases = Purchase.objects.all()
     properties = Property.objects.all()
-
-    return render(request, 'office_page.html', {'agents' : agents, 'purchases' : purchases, 'properties' : properties})
+    areas = Area.objects.all()
+    return render(request, 'office_page.html', {'agents' : agents, 'purchases' : purchases, 'properties' : properties, 'areas' : areas})
 
 @office_required
 def prop_view(request):

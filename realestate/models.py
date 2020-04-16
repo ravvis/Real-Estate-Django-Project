@@ -44,13 +44,21 @@ class Agent(models.Model):
 
         return models.Model.save(self, *args, **kwargs)
 
-class Address(models.Model):
-    address_id = models.AutoField(primary_key=True)
-    area = models.CharField(max_length=30, null=False)
+class City(models.Model):
+    city_id = models.AutoField(primary_key=True)
     city = models.CharField(max_length=30, null=False, default='Indore')
     state = models.CharField(max_length=30, null=False, default='Madhya Pradesh')
     country = models.CharField(max_length=30, null=False, default='India')
-    zipcode = models.IntegerField();
+
+class Area(models.Model):
+    area_id = models.AutoField(primary_key=True)
+    area = models.CharField(max_length=20)
+    zipcode = models.IntegerField(null=False)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, default=1)
+
+class Address(models.Model):
+    address_id = models.AutoField(primary_key=True)
+    area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True)
     description = models.TextField(max_length=100, blank=True)
 
 class Property(models.Model):

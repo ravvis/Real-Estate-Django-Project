@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load my_tags %}
+{% load static %}
 {% block title %}
     Office Dashboard Page
 {% endblock %}
 {% block body %}
     <div class="b-office__parent" id="main">
         <div class="b-office">
+            <!-- Office Sidebar -->
             <div class="b-office__sidebar">
                 <div>
                     <h2>
@@ -36,6 +38,8 @@
                     </a>
                 </div>
             </div>
+
+            <!-- Welcome Block -->
             <div id="welcome_page">
                 
                     <div
@@ -46,6 +50,8 @@
                     </div>
                 
             </div>
+            
+            <!-- Agent List -->
             <div class="b-agent-list hide" id="id_agent_list" >
                 {% for agent in agents %}
                 <div class="b-agent-list__each-agent">
@@ -156,6 +162,8 @@
                 </div>
                 {% endfor %}
             </div>
+            
+            <!-- Active Property List -->
             <div class="b-properties_list hide" id="id_property_list" >
                 {% with p=properties|is_available:1 %}
                 {% if p|is_empty_query == 0 %}
@@ -169,6 +177,7 @@
                         {% for property in properties|is_available:1 %}
                             <div>
                                 <div class="b-property">
+                                    
                                     <div class="b-property__image">
                                         <img 
                                             src="{{ property.property_image.url }}"  
@@ -182,7 +191,7 @@
                                             {{ property.property_name }}
                                         </div>
                                         <div class="b-property__details__area">
-                                            {{ property.address.area}}
+                                            {{ property.address.area.area}}
                                         </div>
                                         <div class="b-property__details__size">
                                             {{ property.no_of_bedrooms}} BHK Flat ( Floor : {{ property.floor }} )
@@ -203,6 +212,9 @@
                                         </div>
                                        
                                     </div>
+                                    <div class="b-property__tag">
+                                        {{property.tag}}
+                                    </div>
                                     
                                 </div>    
                             </div>    
@@ -212,61 +224,6 @@
                 {% endif %}
                 {% endwith %}
             </div>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         </div>
     </div>
 <script>
@@ -458,6 +415,16 @@
         flex-wrap: nowrap;
         margin: 24px;
         margin-top: 0;
+    }
+    .b-property__tag{
+        margin-left: 40px;
+        padding: 4px;
+        background-image: url("{% static 'images/tag.png' %}");  
+        background-repeat: no-repeat;
+        padding-left: 17px;
+        background-size: 51px;
+        max-height: 23px;
+        color: #999;
     }
     .b-property__details{
         margin-left: 16px;
