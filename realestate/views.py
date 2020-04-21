@@ -12,13 +12,13 @@ from .serializers import PropertySerializer
 def error_view(request):
     return render(request, '404.html')
 
-def agentlogin(request):
+def login_(request):
     if(request.method == 'POST'):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
 
-        if user is not None and user.is_agent:
+        if user is not None:
             login(request, user)
             if user.is_authenticated and user.is_agent:
                 x = 24
@@ -29,12 +29,15 @@ def agentlogin(request):
                     x = x + 1
                 return redirect('/agent-dashboard/')
 
+            elif user.is_authenticated and user.is_office:
+                return redirect('/office-dashboard/')
+
         else:
             message = 'Invalid username or password'
             messages.error(request, message)
-            return redirect('/agentlogin/')
+            return redirect('/login/')
 
-    return render(request, 'registration/agent_login.html')
+    return render(request, 'registration/login.html')
          
 @agent_required
 def agent_dashboard(request): 
@@ -54,7 +57,7 @@ def failure(request):
     return render(request, 'failure.html')
 
 def home(request):
-    return render(request, 'home.html')
+    return redirect('/login/')
 
 def logout_from(request):
     logout(request)

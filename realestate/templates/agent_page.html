@@ -9,8 +9,8 @@ Agent Dashboard
             <div>
                 <h1>Hello,  {{ agent.agent.first_name }}!!</h1>    
             </div>
-            <div class="filter">
-                Filter : <input type="text" name="filter" id="">
+            <div class="filter" style="margin-top: 44px;">
+                Filter : <input type="text" name="filter" id="" style="border: 1px none !important;">
             </div>
             
             <div class="b-agent-s__options">
@@ -25,7 +25,18 @@ Agent Dashboard
             </div>    
             <div class="nav-buttons">
                 <a href="/logout/">
-                    <button class="btn_update">
+                    <button 
+                    class="btn_update"
+                    style="
+                        border: 1px none !important;
+                        background-color: #2d6f68;
+                        color: white;
+                        margin-top: 17px;
+                        padding-left: 55px;
+                        padding-right: 55px;
+                        border-radius: 14px;
+                    "
+                    >
                         Logout
                     </button>
                 </a>
@@ -253,11 +264,6 @@ Agent Dashboard
 </script>
 <style>
     .b-property-details__parent{
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        position: fixed;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -290,7 +296,7 @@ Agent Dashboard
         font-weight: bold;
     }
     #sale_report{
-        margin-left: 42px;
+        margin-left: 320px;
     }
     .nav-buttons{
         display: flex;
@@ -308,10 +314,6 @@ Agent Dashboard
     }
     .b-agent-s__options{
         margin-top: 48px;
-        border-style: solid;
-        border-color: black;
-        border-radius: 15px;
-        border-width: 1px;
         display: flex;
         flex-direction: column;
     }
@@ -349,15 +351,25 @@ Agent Dashboard
         display: flex;
         flex-direction: row;
         justify-content: center;
-        max-height: 100vh;
+        height: 100vh;
+        background-color: #f4f8f4;
     }
     .b-agent__sidebar{
         bottom: 0;
         top: 0;
-        margin-top: 40px;
-        color: black;
-        margin-right: 64px;
-        margin-left: 24px;
+        position: fixed;
+        left: 32px;
+        margin-top: 60px;
+        color: white;
+        margin-right: 20px;
+        margin-left: 12px;
+        padding-top: 40px;
+        padding-left: 20px;
+        padding-right: 20px;
+        background: linear-gradient(to left, #4ca2cd, #67B26F);
+        margin-bottom: 45px;
+        border: 1px;
+        border-radius: 15px;
     }
     .b-agent{
         display: flex;
@@ -384,7 +396,7 @@ Agent Dashboard
 	background-color: #000000;
 }
     .b-main-content{
-        margin-left: 34px;
+        margin-left: 312px;
     }
     .deact_btn{
         background-color: #fff;
@@ -400,6 +412,7 @@ Agent Dashboard
         flex-wrap: nowrap;
         margin: 24px;
         margin-top: 0;
+        background-color: white;
     }
     .b-property__details{
         margin-left: 16px;

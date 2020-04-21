@@ -1,4 +1,5 @@
 from django import template
+from django.db.models import Sum
 
 register = template.Library()
 
@@ -42,3 +43,4 @@ def is_available(properties, el):
         return properties.filter(is_available = True)
     else:
         return properties.filter(is_available = False)
+
