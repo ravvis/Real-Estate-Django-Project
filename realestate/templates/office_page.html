@@ -68,7 +68,11 @@
             
             <!-- Agent List -->
             <div class="b-agent-list hide" id="id_agent_list" >
-                <h1>Agent List</h1>
+                <center>
+                    <h1 style="
+                        color: #2d6f68;
+                    ">Agent List</h1>
+                </center>
                 {% for agent in agents %}
                 <div class="b-agent-list__each-agent">
                     <div class="b-agent-info">
@@ -181,7 +185,7 @@
             </div>
             
             <!-- Active Property List -->
-            <div class="b-properties_list hide" id="id_property_list" >
+            <div class="b-properties_list hide" id="id_property_list" style="color: #2d6f68;">
                 {% with p=properties|is_available:1 %}
                 {% if p|is_empty_query == 0 %}
                 <div>                  
@@ -347,17 +351,18 @@
     }
     table{
         padding: 8px;
-        border: 1px solid black;
+        border: 1px solid #2d6f68;
         border-collapse: collapse;
     }
     td{
         padding: 8px;
     }
     tr:first-child td{
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid #2d6f68;;
     }
     tr td{
-        border-right: 1px solid black;
+        border-right: 1px solid #2d6f68;
+        color: #2d6f68;
     }
     .b-close-btn{
         display: flex;
@@ -374,8 +379,11 @@
         flex-direction: row;
         justify-content: space-between;
         padding: 48px;
-        border: 1px solid black;
+        border: 1px solid #2d6f68;
+        border-radius: 20px;
+        color: #2d6f68;
         margin: 8px;
+        background-color: white;
     }
     .b-office__parent{
         top: 0;
@@ -422,18 +430,21 @@
         margin-top: 8px;
         padding: 0;
         min-width: 70px;
-        padding-left: 24px;
-        padding-right: 24px;
         box-sizing: border-box;
         border: 1px solid #35495e;
         border-radius: 20px;
         box-shadow: 2px 4px 7px 0 #0000001a;
         background-color: #fff;
         height: 40px;
-        
+        background-color: #2d6f68;
+        color: white;
+        border-radius: 12px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
     .btn_update:hover{
-        background-color: rgb(238, 238, 238);
+        background-color: white;
+        color: #2d6f68;
     }
     button{
         -webkit-appearance: button;
@@ -455,7 +466,7 @@
         padding-left: 17px;
         background-size: 51px;
         max-height: 23px;
-        color: #999;
+        color: #87bab4;
     }
     .b-property__details{
         margin-left: 16px;
@@ -464,7 +475,7 @@
         font-size: 28px;
     }
     .b-property__details__area{
-        color: #999;
+        color: #87bab4;
         font-size: 16px;
         margin-top: 8px;
         margin-bottom: 8px;
@@ -475,7 +486,7 @@
     }
     .b-property__details__address{
         font-size: 14px;
-        color: #999;
+        color: #87bab4;
         max-width: 268px;
     }
 
