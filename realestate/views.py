@@ -12,13 +12,13 @@ from .serializers import PropertySerializer
 def error_view(request):
     return render(request, '404.html')
 
-def agentlogin(request):
+def login_(request):
     if(request.method == 'POST'):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
 
-        if user is not None and user.is_agent:
+        if user is not None:
             login(request, user)
             if user.is_authenticated and user.is_agent:
                 x = 24
@@ -29,12 +29,15 @@ def agentlogin(request):
                     x = x + 1
                 return redirect('/agent-dashboard/')
 
+            elif user.is_authenticated and user.is_office:
+                return redirect('/office-dashboard/')
+
         else:
             message = 'Invalid username or password'
             messages.error(request, message)
-            return redirect('/agentlogin/')
+            return redirect('/login/')
 
-    return render(request, 'registration/agent_login.html')
+    return render(request, 'registration/login.html')
          
 @agent_required
 def agent_dashboard(request): 
@@ -54,7 +57,7 @@ def failure(request):
     return render(request, 'failure.html')
 
 def home(request):
-    return render(request, 'home.html')
+    return redirect('/login/')
 
 def logout_from(request):
     logout(request)
@@ -88,14 +91,39 @@ def office_dashboard(request):
 
 @office_required
 def prop_view(request):
-    context = {}
     if request.method == 'POST':
 
         form = PropertyForm(request.POST, request.FILES)
+        form_owner = PersonForm(request.POST)
+        city = City.objects.get(pk=1)
+        area = request.POST.get('area')
+        zipcode = request.POST.get('zipcode')
+        description = request.POST.get('description')
         
-        if form.is_valid():
+        if form.is_valid() and form_owner.is_valid():
             print('is valid')
-            form.save(commit=True)
+            flag = 0
+            for a in Area.objects.all():
+                if a.area == area and a.zipcode == zipcode:
+                    flag = 1
+                    break
+
+            if(flag == 1):
+                area = Area.objects.get(area=area)
+            else:
+                ar = Area(area=area, zipcode=zipcode, city=city)
+                ar.save()
+                area = ar
+            ad = Address(area=area, description=description)
+            ad.save()
+            f = form.instance
+            f2 = form_owner.instance
+            
+            f.address = ad
+            f.owner = f2
+            
+            f.save()
+            f2.save()
             return redirect('/property/')
             print('success')
         else:
@@ -104,8 +132,9 @@ def prop_view(request):
     
     else :
         form = PropertyForm()
+        form_owner = PersonForm()
 
-    return render(request, "property.html", {'form':form})
+    return render(request, "property.html", {'form':form, 'form_owner':form_owner})
 
 @office_required
 def agent_register(request):
