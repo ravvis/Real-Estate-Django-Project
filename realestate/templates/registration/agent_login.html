@@ -44,7 +44,7 @@
             </p>
             <p>
                 <label>Password</label>
-                <input type="password" name="password">
+                <input type="password" name="password" style="margin-left: 4px;">
             </p>
             <button type="submit" class="btn_update">Login</button>
         </div>
@@ -52,6 +52,16 @@
     
     
 </form>
+<script>
+    function check(event){
+        console.log(event.password.value);
+        if(event.password.value == ''){
+            return false;
+        }
+        else
+            return true;
+    }
+</script>
 <style>
     .btn_update{
         font-weight: 500;
@@ -78,6 +88,12 @@
         -webkit-appearance: button;
         cursor: pointer;
         outline: none;
+    }
+    .parent{
+        
+    }
+    .login_page{
+        
     }
 </style>
 {% endblock %}

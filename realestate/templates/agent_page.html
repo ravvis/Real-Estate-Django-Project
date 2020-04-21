@@ -58,7 +58,7 @@ Agent Dashboard
                             {{ property.property_name }}
                         </div>
                         <div class="b-property__details__area">
-                            {{ property.address.area}}
+                            {{ property.address.area.area}}
                         </div>
                         <div class="b-property__details__size">
                             {{ property.no_of_bedrooms}} BHK Flat ( Floor : {{ property.floor }} )
@@ -125,7 +125,7 @@ Agent Dashboard
                                         {{ property.property_name }}
                                     </div>
                                     <div class="b-property__details__area">
-                                        {{ property.address.area}}
+                                        {{ property.address.area.area}}
                                     </div>
                                     <div class="b-property__details__size">
                                         {{ property.no_of_bedrooms}} BHK Flat ( Floor : {{ property.floor }} )
@@ -190,6 +190,9 @@ Agent Dashboard
                         <b>Price</b>
                     </td>
                     <td>
+                        <b>Purchase ID</b>
+                    </td>
+                    <td>
                         <b>Date of Purchase</b>
                     </td>
                     <td>
@@ -207,6 +210,9 @@ Agent Dashboard
                     </td>
                     <td>
                         {{ purchase.property.price }}
+                    </td>
+                    <td>
+                        {{ purchase.purchase_id }}
                     </td>
                     <td>
                         {{ purchase.date_of_purchase|date }}

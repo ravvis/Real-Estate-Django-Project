@@ -5,6 +5,8 @@ from .models import *
 from .forms import *
 from .decorators import *
 from django.contrib import messages
+from rest_framework import viewsets
+from .serializers import PropertySerializer
 
 
 def error_view(request):
@@ -16,7 +18,7 @@ def agentlogin(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
+        if user is not None and user.is_agent:
             login(request, user)
             if user.is_authenticated and user.is_agent:
                 x = 24
@@ -64,7 +66,7 @@ def officelogin(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
+        if user is not None and user.is_office:
             login(request, user)
             if user.is_authenticated and user.is_office:
                 return redirect('/office-dashboard/')
@@ -174,5 +176,7 @@ def client_view(request, property_id):
 def success(request):
     return render(request, 'success.html')
 
-
+class PropertyViewSet(viewsets.ModelViewSet):
+    queryset = Property.objects.all().order_by('property_id')
+    serializer_class = PropertySerializer
 
