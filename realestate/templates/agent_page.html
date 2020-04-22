@@ -9,8 +9,45 @@ Agent Dashboard
             <div>
                 <h1>Hello,  {{ agent.agent.first_name }}!!</h1>    
             </div>
-            <div class="filter" style="margin-top: 44px;">
-                Filter : <input type="text" name="filter" id="" style="border: 1px none !important;">
+            <div class="filter" style="margin-top: 44px; display:flex; flex-direction:column;">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <center>
+                        <p>
+                            <h4>Filter Properties</h4>
+                        </p>
+                        <p>
+                            <input type="text" name="filter" placeholder="Property Name..." autocomplete="off" id="" style="border: 1px none !important;">
+                        </p>
+                        <p>
+                            <input type="text" name="area" placeholder="Enter Area.." autocomplete="off" style="border: 1px none !important;" id="">
+                        </p>
+                        <p> 
+                            <input type="radio" name="type" value="filtered" id="">
+                            <Label for="type">Filter</Label>             
+                            <input type="radio" name="type" value="all" id="">
+                            <Label for="type">All</Label>
+                            <input type="radio" name="type" value="sale" id="">
+                            <Label for="type">Sale</Label>
+                            <input type="radio" name="type" value="rent" id="">
+                            <Label for="type">Rent</Label>
+                        </p>
+                        <p>
+                            <input 
+                                type="submit" 
+                                value="Search" 
+                                style="border: 1px;
+                                    background-color: #2d6f68;
+                                    color: white;
+                                    padding: 10px;
+                                    padding-left: 36px;
+                                    padding-right: 36px;
+                                    cursor: pointer;
+                                    font-size: 14px;"
+                            >
+                        </p>
+                    </center>                    
+                </form>    
             </div>
             
             <div class="b-agent-s__options">
@@ -31,10 +68,11 @@ Agent Dashboard
                         border: 1px none !important;
                         background-color: #2d6f68;
                         color: white;
-                        margin-top: 17px;
+                        margin-top: -14px;
+                        padding:11px;
                         padding-left: 55px;
                         padding-right: 55px;
-                        border-radius: 14px;
+                        border-radius: 11px;
                     "
                     >
                         Logout
@@ -43,16 +81,21 @@ Agent Dashboard
             </div>
     </div>    
     <div class="b-agent">
-        <div class="b-agent__message">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="{{ message.tags }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
         <div class="b-main-content" id="sale_rent_update">
+            <div 
+            class="b-agent__message" 
+            style="position: fixed;
+                top: 21px;
+                margin-left: 59px;"
+            >
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
             {% for property in properties|in_property:''%}
                     
                 <div class="b-property">
@@ -264,6 +307,11 @@ Agent Dashboard
 </script>
 <style>
     .b-property-details__parent{
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -442,19 +490,18 @@ Agent Dashboard
     .btn_update{
         font-weight: 500;
         font-size: 14px;
-        color: #35495e;
+        color: #2d6f68;
         margin: 0;
         margin-top: 8px;
-        padding: 0;
+        padding: 7px;
         min-width: 70px;
-        padding-left: 24px;
-        padding-right: 24px;
+        padding-left: 27px;
+        padding-right: 27px;
         box-sizing: border-box;
-        border: 1px solid #35495e;
-        border-radius: 20px;
+        border: 1px solid #2d6f68;
+        border-radius: 7px;
         box-shadow: 2px 4px 7px 0 #0000001a;
-        background-color: #fff;
-        height: 40px;
+        background-color: white;
         
     }
     .btn_update:hover{

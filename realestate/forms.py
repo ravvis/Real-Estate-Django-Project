@@ -9,7 +9,7 @@ class PropertyForm(forms.ModelForm):
     
     class Meta:
         model = Property
-        fields = "__all__"
+        fields = ['property_name', 'property_image', 'tag', 'price', 'no_of_bedrooms', 'no_of_bathrooms', 'floor']
 
 class PersonForm(forms.ModelForm):
 

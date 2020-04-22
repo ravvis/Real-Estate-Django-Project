@@ -186,6 +186,46 @@
             
             <!-- Active Property List -->
             <div class="b-properties_list hide" id="id_property_list" style="color: #2d6f68;">
+                <div class="filter" style="margin-top: 44px; display:flex; flex-direction:column;position:fixed;right:10;">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <center>
+                            <p>
+                                <h4>Filter Properties</h4>
+                            </p>
+                            <p>
+                                <input type="text" name="filter" placeholder="Property Name..." autocomplete="off" id="" style="border: 1px none !important;">
+                            </p>
+                            <p>
+                                <input type="text" name="area" placeholder="Enter Area.." autocomplete="off" style="border: 1px none !important;" id="">
+                            </p>
+                            <p> 
+                                <input type="radio" name="type" value="filtered" id="">
+                                <Label for="type">Filter</Label>             
+                                <input type="radio" name="type" value="all" id="">
+                                <Label for="type">All</Label>
+                                <input type="radio" name="type" value="sale" id="">
+                                <Label for="type">Sale</Label>
+                                <input type="radio" name="type" value="rent" id="">
+                                <Label for="type">Rent</Label>
+                            </p>
+                            <p>
+                                <input 
+                                    type="submit" 
+                                    value="Search" 
+                                    style="border: 1px;
+                                        background-color: #2d6f68;
+                                        color: white;
+                                        padding: 10px;
+                                        padding-left: 36px;
+                                        padding-right: 36px;
+                                        cursor: pointer;
+                                        font-size: 14px;"
+                                >
+                            </p>
+                        </center>                    
+                    </form>    
+                </div>
                 {% with p=properties|is_available:1 %}
                 {% if p|is_empty_query == 0 %}
                 <div>                  
@@ -215,7 +255,7 @@
                                             {{ property.address.area.area}}
                                         </div>
                                         <div class="b-property__details__size">
-                                            {{ property.no_of_bedrooms}} BHK Flat ( Floor : {{ property.floor }} )
+                                            {{ property.no_of_bedrooms}} BHK Flat
                                         </div>
                                         
                                         <div class="b-property__details__price">
@@ -228,15 +268,98 @@
                                         <div class="b-property__details__address">
                                             {{ property.address.description }}
                                         </div>
-                                        <div class="b-property__details_price">
-                                            By : {{ property.owner.owner}} - ( {{ property.owner.owner.phone_no }} )
-                                        </div>
                                        
                                     </div>
                                     <div class="b-property__tag">
                                         {{property.tag}}
                                     </div>
-                                    
+                                    <div>
+                                        <button class="b-details__btn" onclick="show_property_popup('ppp_{{property.property_id}}')">Details</button>
+                                        <div class="b-property__popup__parent hide" id = "ppp_{{property.property_id}}">
+                                            <div class="b-property__popup">
+                                                <div class="b-close-btn" onclick="close_property_popup('ppp_{{property.property_id}}')" style="font-size: 28px; cursor:pointer;">
+                                                    &#10006;
+                                                </div>
+                                                <div>
+                                                    <div class="b-popup__property__details">
+                                                        <center>
+                                                            <h1>Property Details</h1>
+                                                        </center>
+                                                        
+                                                        <div 
+                                                        style="display: flex;
+                                                        flex-direction:row;
+                                                        justify-content:space-between;
+                                                        ">
+                                                            <div>
+                                                                <h3>
+                                                                    {{ property.property_name }}
+                                                                </h3>
+                                                                <p>
+                                                                    Property ID : {{ property.property_id }}
+                                                                </p>
+                                                                <p>
+                                                                    Property Type : {{ property.tag }}
+                                                                </p>
+                                                                <p>
+                                                                    Price : {{ property.price }}
+                                                                </p>
+                                                                <p>
+                                                                    BHK : {{ property.no_of_bedrooms }}
+                                                                </p>
+                                                                <p>
+                                                                    Floor : {{ property.floor }}
+                                                                </p>
+                                                                <p>
+                                                                    Date of entry : {{ property.date_of_entry|date}}
+                                                                </p>
+                                                            </div>
+                                                            <div style="margin-left: 68px;">
+                                                                <img 
+                                                                    src="{{ property.property_image.url }}"  
+                                                                    alt="property image" 
+                                                                    width="300px" 
+                                                                    height="300px"
+                                                                >
+                                                            </div>
+                                                        </div>    
+                                                    </div>
+                                                    <div class="b-popup__address__details">
+                                                        <h3>Address Details</h3>
+                                                        <div>
+                                                            <p>
+                                                                City : {{ property.address.area.city.city }}
+                                                            </p>
+                                                            <p>
+                                                                Area : {{ property.address.area.area }}
+                                                            </p>
+                                                            <p>
+                                                                Zipcode : {{ property.address.area.zipcode }}
+                                                            </p>
+                                                            <p>
+                                                                Description : {{ property.address.description }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="b-popup__owner__details">
+                                                        <h3>Owner Details</h3>
+                                                        <div>
+                                                            <p>
+                                                                Name : {{ property.owner.owner.first_name }} {{ property.owner.owner.last_name }}
+                                                            </p>
+                                                            <p>
+                                                                email : {{ property.owner.owner.email }}
+                                                            </p>
+                                                            <p>
+                                                                phone : {{ property.owner.owner.phone_no }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>    
                             </div>    
                         {% endfor %}
@@ -289,6 +412,14 @@
     }
     function property_register(){
         window.location = '/property/'
+    }
+    function show_property_popup(str){
+        document.getElementById(str).classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+    }
+    function close_property_popup(str){
+        document.getElementById(str).classList.add('hide');
+        document.body.style.overflow = 'auto';
     }
 </script>
 <style>
@@ -413,7 +544,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        background-color: rgba(75, 72, 72, 0.3);
+        background-color: rgba(75, 72, 72, 0.7);
     }
     .b-agent__sales-child{
         background-color: white;
@@ -489,6 +620,54 @@
         color: #87bab4;
         max-width: 268px;
     }
-
+    .b-details__btn{
+        margin-top: 38px;
+        margin-left: -48px;
+        border: 1px;
+        background-color: #2d6f68;
+        color: white;
+        border-radius: 5px;
+        padding: 4px;
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+    .b-property__popup__parent{
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        position: fixed;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(75, 72, 72, 0.7);
+    }
+    .b-property__popup{
+        background-color: white;
+        padding-left: 80px;
+        padding-right: 80px;
+        padding-top: 24px;
+        padding-bottom: 24px;
+        border-radius: 15px;
+        max-height: 500px;
+        overflow: auto;
+    }
+    body::-webkit-scrollbar-track, .b-agent__sales-child::-webkit-scrollbar-track, .b-property__popup::-webkit-scrollbar-track
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #d9fffc;
+    }
+    
+    body::-webkit-scrollbar, .b-agent__sales-child::-webkit-scrollbar, .b-property__popup::-webkit-scrollbar
+    {
+        width: 6px;
+        background-color: #F5F5F5;
+    }
+    
+    body::-webkit-scrollbar-thumb, .b-agent__sales-child::-webkit-scrollbar-thumb, .b-property__popup::-webkit-scrollbar-thumb
+    {
+        background-color: #2d6f68;
+    }
 </style>
 {% endblock %}

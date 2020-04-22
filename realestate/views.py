@@ -49,15 +49,67 @@ def agent_dashboard(request):
         print(agent.agent.email)
     properties = {}
     properties = Property.objects.filter(is_available=True)
+    message = ''
+    if(request.method == 'POST'):
+        name = request.POST.get('filter')
+        area = request.POST.get('area')
+        print('name : ' + name)
+        print(area)
+        type = request.POST.get('type')
+        
+        if name != '' and (type == 'filtered' or type is None):
+            print('name')
+            print('got filter, yayyyyyyyyyyy!!')
+            properties = Property.objects.filter(property_name__icontains=name, is_available=True)
+            if not properties:
+                print('noooooooo')
+                message = 'No results found with the property name ' + name
+            
+            else:
+                message = 'Here are the properties with the property name ' + name
+                
+        elif area != '' and (type == 'filtered' or type is None):
+            print('area')
+            properties = Property.objects.filter(address__area__area__icontains=area, is_available=True)
+            if not properties:
+                print('noooooooo')
+                message = 'No results found in the area ' + area
+
+            else:
+                message = 'Here are the properties in the the area ' + area
+
+        elif type == 'all':
+            properties = Property.objects.filter(is_available=True)
+            if not properties:
+                message = 'No Property Found'
+
+        
+        elif type == 'rent' or type == 'sale':
+            properties = Property.objects.filter(is_available=True, tag=type)
+            
+            if not properties:
+                message = 'No property available for ' + type
+            
+            else:
+                message = 'Here are the properties available for ' + type
+            
     
     purchases = Purchase.objects.filter(agent=agent)
+    if message != '':
+        messages.error(request, message)
     return render(request, 'agent_page.html', {'properties' : properties, 'agent' : agent, 'purchases' : purchases})
 
 def failure(request):
     return render(request, 'failure.html')
 
 def home(request):
-    return redirect('/login/')
+    if request.user.is_authenticated:
+        if request.user.is_agent:
+            return redirect('/agent-dashboard/')
+        else:
+            return redirect('/office-dashboard/')
+    else:
+        return redirect('/login/')
 
 def logout_from(request):
     logout(request)
@@ -116,14 +168,19 @@ def prop_view(request):
                 area = ar
             ad = Address(area=area, description=description)
             ad.save()
+
             f = form.instance
             f2 = form_owner.instance
+            f2.save()
+            
+            owner = Owner(owner=f2)
+            owner.save()
             
             f.address = ad
-            f.owner = f2
+            f.owner = owner
             
             f.save()
-            f2.save()
+            
             return redirect('/property/')
             print('success')
         else:

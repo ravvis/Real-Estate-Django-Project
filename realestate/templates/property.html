@@ -7,7 +7,7 @@
         <div onclick="{window.location = '/office-dashboard/'}" 
         style="cursor: pointer; 
         font-size:20px;
-        margin-left: -353px;
+        margin-left: -1000px;
         margin-bottom: 13px;
         color:white;
         ">
@@ -16,16 +16,45 @@
         <div class="b-property">
             <form action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form.as_p }}
-                {{ form_owner.as_p}}
-                Area : <input type="text" name="area">
-                Address : <input type="text" name="description">
-                <input type="submit" value="Save" />
+                <div style="color:red;">
+                    <label>* all the fields are mandatory to be filled</label>
+                </div>
+                <div class="details">
+                    <div>
+                        <h2>
+                            Property Details
+                        </h2>
+                        {{ form.as_p }}
+                    </div>
+                    <div>
+                        <h2>
+                            Owner Details
+                        </h2>
+                        {{ form_owner.as_p}}
+                    </div>
+                    <div>
+                        <h2>
+                            Address Details
+                        </h2>
+                        <p>
+                            Area : <input type="text" required name="area">
+                        </p>
+                        <p>
+                            Address : <input type="text" required name="description">
+                        </p>
+                        <p>
+                            Zipcode : <input type="number" required name="zipcode" >
+                        </p>
+                    </div>
+                </div>
+                <p>
+                    <input type="submit" value="Save" id="submit-btn"/>
+                </p>    
             </form>
-                {{ form.errors}}
         </div>
     </div>   
     <style>
+        
         .b-property__parent{
             top: 0;
             bottom: 0;
@@ -45,10 +74,36 @@
             align-items: center;
             justify-content: center;
             border-radius: 24px;
-            padding: 16px;
             color: #22534e;
             background-color: white;
             padding: 38px;
+            padding-bottom: 0px;
+            overflow: auto;
         }
+        .details{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;    
+        }
+        .details div{
+            padding-left: 20px;
+            padding-right: 20px;    
+        }
+        .details div:not(:last-child){
+            border-right: 1px solid black;
+        }
+        #submit-btn{
+            padding-right: 32px;
+            float: right;
+            margin-bottom: 16px;
+            margin-top: 24px;
+            border: 1px;
+            background-color: #1f4f47;
+            color: white;
+            padding-left: 32px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+        
     </style>
 {% endblock %}
