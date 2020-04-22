@@ -5,7 +5,17 @@ Agent Dashboard
 {% endblock %}
 {% block body %}
         <div class="b-client_parent">
+            <div onclick="{window.location = '/agent-dashboard/'}" 
+            style="cursor: pointer; 
+            font-size:20px;
+            margin-left: -294px;
+            margin-bottom: 12px;
+            color:white;
+            ">
+                <i class="fa fa-angle-double-left" style="font-size:22px;"></i> back
+            </div>
             <div class="b-client">
+
                 
                 <h2>Enter Client's Information</h2>
                 <form action="" method="post">
@@ -14,7 +24,17 @@ Agent Dashboard
                     <span style="font-size: 11px; color:red;">(write number in +91 form!)</span>
                     <br>
                     <br>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" 
+                    style="
+                    float: right;
+                    background-color: #2d6f68;
+                    color: white;
+                    border: 1px;
+                    padding: 9px;
+                    padding-right: 20px;
+                    padding-left: 20px;
+                    cursor: pointer;"
+                    />
                     {{ form.errors }}
                     {{ form.non_field_errors }}
                 </form>
@@ -29,9 +49,10 @@ Agent Dashboard
     right: 0;
     position: fixed;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(to left, #4ca2cd, #67B26F);
 }
 .b-client{
     display: flex;
@@ -39,10 +60,10 @@ Agent Dashboard
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
-    border-style:solid; 
-    border-width:2px; 
-    border-color:black; 
-    padding: 16px;
+    border-radius: 24px;
+    padding: 40px;
+    background-color: white;
+    color: #2d6f68;
 }
 </style>
 {% endblock %}

@@ -23,7 +23,7 @@ Agent Register
                     <br>
                     {{ form2.as_p}}
                     <br>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" id="submit-btn"/>
                     {{ form1.errors }}
                     {{ form1.non_field_errors }}
                     {{ form2.errors }}
@@ -55,6 +55,17 @@ Agent Register
     border-radius: 24px;
     padding: 40px;
     background-color: white;
+}
+#submit-btn{
+    padding-right: 32px;
+    float: right;
+    margin-top: 24px;
+    border: 1px;
+    background-color: #1f4f47;
+    color: white;
+    padding-left: 32px;
+    font-size: 17px;
+    cursor: pointer;
 }
 </style>
 {% endblock %}
