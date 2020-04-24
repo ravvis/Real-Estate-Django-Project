@@ -257,7 +257,12 @@ def client_view(request, property_id):
     else:
         return render(request, 'already_purchased.html')
 
-
+@office_required
+def delete_property(request, property_id):
+    print('came here u bitch')
+    property = Property.objects.get(pk = property_id)
+    property.delete()
+    return redirect('/office-dashboard/')
         
 def success(request):
     return render(request, 'success.html')
@@ -266,3 +271,6 @@ class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all().order_by('property_id')
     serializer_class = PropertySerializer
 
+
+def intro(request):
+    return render(request, 'Intro.html')

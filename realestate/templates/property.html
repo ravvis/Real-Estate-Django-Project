@@ -16,23 +16,22 @@
         <div class="b-property">
             <form action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div style="color:red;">
-                    <label>* all the fields are mandatory to be filled</label>
-                </div>
                 <div class="details">
-                    <div>
+                    <div id="property_input">
                         <h2>
                             Property Details
                         </h2>
                         {{ form.as_p }}
+                        
                     </div>
-                    <div>
+                    <div id="owner_input">
                         <h2>
                             Owner Details
                         </h2>
                         {{ form_owner.as_p}}
+                        
                     </div>
-                    <div>
+                    <div id="address_input">
                         <h2>
                             Address Details
                         </h2>
@@ -45,16 +44,22 @@
                         <p>
                             Zipcode : <input type="number" required name="zipcode" >
                         </p>
+                        <p>
+                            <input type="submit" value="Save" id="submit-btn"/>
+                        </p>   
                     </div>
                 </div>
-                <p>
-                    <input type="submit" value="Save" id="submit-btn"/>
-                </p>    
+                 
             </form>
         </div>
     </div>   
+    <script>
+
+    </script>
     <style>
-        
+        .hide{
+            display: none;
+        }
         .b-property__parent{
             top: 0;
             bottom: 0;
@@ -89,9 +94,7 @@
             padding-left: 20px;
             padding-right: 20px;    
         }
-        .details div:not(:last-child){
-            border-right: 1px solid black;
-        }
+        
         #submit-btn{
             padding-right: 32px;
             float: right;
