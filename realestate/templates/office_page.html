@@ -186,46 +186,7 @@
             
             <!-- Active Property List -->
             <div class="b-properties_list hide" id="id_property_list" style="color: #2d6f68;">
-                <div class="filter" style="margin-top: 44px; display:flex; flex-direction:column;position:fixed;right:10;">
-                    <form action="" method="POST">
-                        {% csrf_token %}
-                        <center>
-                            <p>
-                                <h4>Filter Properties</h4>
-                            </p>
-                            <p>
-                                <input type="text" name="filter" placeholder="Property Name..." autocomplete="off" id="" style="border: 1px none !important;">
-                            </p>
-                            <p>
-                                <input type="text" name="area" placeholder="Enter Area.." autocomplete="off" style="border: 1px none !important;" id="">
-                            </p>
-                            <p> 
-                                <input type="radio" name="type" value="filtered" id="">
-                                <Label for="type">Filter</Label>             
-                                <input type="radio" name="type" value="all" id="">
-                                <Label for="type">All</Label>
-                                <input type="radio" name="type" value="sale" id="">
-                                <Label for="type">Sale</Label>
-                                <input type="radio" name="type" value="rent" id="">
-                                <Label for="type">Rent</Label>
-                            </p>
-                            <p>
-                                <input 
-                                    type="submit" 
-                                    value="Search" 
-                                    style="border: 1px;
-                                        background-color: #2d6f68;
-                                        color: white;
-                                        padding: 10px;
-                                        padding-left: 36px;
-                                        padding-right: 36px;
-                                        cursor: pointer;
-                                        font-size: 14px;"
-                                >
-                            </p>
-                        </center>                    
-                    </form>    
-                </div>
+                
                 {% with p=properties|is_available:1 %}
                 {% if p|is_empty_query == 0 %}
                 <div>                  
@@ -360,6 +321,20 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="delete_btn">
+                                        <button 
+                                        onclick="delete_property('{{property.property_id}}', '{{ property.property_name }}')"
+                                        style="background-color: white;
+                                            border: 1px solid red;
+                                            color: red;
+                                            border-radius: 11px;
+                                            padding: 5px;
+                                            padding-right: 10px;
+                                            padding-left: 10px;"
+                                        >
+                                            delete
+                                        </button>
+                                    </div>
                                 </div>    
                             </div>    
                         {% endfor %}
@@ -421,8 +396,19 @@
         document.getElementById(str).classList.add('hide');
         document.body.style.overflow = 'auto';
     }
+    function delete_property(id, name){
+        isIt = confirm('The property ' + name + ' with property id ' + id + ' will be deleted from the database!!')
+        if(isIt){
+            console.log('going /delete/property/' + id)
+            window.location = '/delete/property/' + id 
+        }
+    }
 </script>
 <style>
+    .delete_btn{
+        margin-left: -67px;
+        margin-top: 160px;
+    }
     body{
         background-color: #f4f8f4;
     }

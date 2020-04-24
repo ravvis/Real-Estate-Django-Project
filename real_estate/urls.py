@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
+    path('intro/', views.intro, name='intro'),
     path('login/', views.login_, name='login_'),
     path('logout/', views.logout_from, name='logout'),
     path('property/', views.prop_view, name='form'),
@@ -16,7 +17,7 @@ urlpatterns = [
     path('failure/', views.failure, name='failure'),
     path('agent-dashboard/', views.agent_dashboard, name="agent_dashboard"),
     path('office-dashboard/', views.office_dashboard, name="office_dashboard"),
-    
+    re_path(r'^delete/property/(?P<property_id>\d+)/$', views.delete_property, name="delete_property"),
     re_path(r'^purchase/(?P<property_id>\d+)/$', views.client_view, name="purchase_client"),
     
 ] 
