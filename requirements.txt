@@ -6,7 +6,7 @@ Django==3.0.3
 django-cors-headers==3.2.1
 django-phonenumber-field==4.0.0
 django-rest-framework==0.1.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 filelock==3.0.12
 mysqlclient==1.4.6
 phonenumbers==8.12.1
