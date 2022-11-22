@@ -10,7 +10,7 @@ djangorestframework==3.11.0
 filelock==3.0.12
 mysqlclient==1.4.6
 phonenumbers==8.12.1
-Pillow==7.1.1
+Pillow==9.3.0
 PyMySQL==0.9.3
 pytz==2019.3
 six==1.14.0
